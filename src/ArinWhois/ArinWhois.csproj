@@ -1,27 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard1.5</TargetFrameworks>
-    <ProjectGuid>{715FB44F-AE81-406D-9EA3-224F55807E06}</ProjectGuid>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <RootNamespace>ArinWhois</RootNamespace>
     <AssemblyName>ArinWhois</AssemblyName>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <PackageId>ArinWhois</PackageId>
     <PackageVersion>0.3</PackageVersion>
     <Title>ArinWhois.NET</Title>
-    <Authors>MaxHorstmann</Authors>
-    <PackageProjectUrl>https://github.com/MaxHorstmann/ArinWhois.NET</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/MaxHorstmann/ArinWhois.NET</RepositoryUrl>
-    <Description>.NET client for ARIN's Whois RESTful Web Service, the API to accessing ARIN's Whois data.</Description>
-    <PackageReleaseNotes>Pre-Relase version</PackageReleaseNotes>
-    <Copyright>Copyright Max Horstmann, 2014</Copyright>
-    <PackageTags>ARIN</PackageTags>
+    <Authors>MaxHorstmann; pwiens; aspnet4you</Authors>
+    <PackageProjectUrl>https://github.com/aspnet4you/ArinWhois.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/aspnet4you/ArinWhois.NET</RepositoryUrl>
+    <Description>.NET client for ARIN's Whois RESTful Web Service, the API to accessing ARIN's Whois data. This project is foked from pwiens and upgraded to dotnetcore3.1. Origial author is MaxHorstmann.</Description>
+    <PackageReleaseNotes>
+    </PackageReleaseNotes>
+    <Copyright>MIT License @ https://github.com/aspnet4you/ArinWhois.NET/blob/master/LICENSE </Copyright>
+    <PackageTags>ARIN WHOIS</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
-
 </Project>
