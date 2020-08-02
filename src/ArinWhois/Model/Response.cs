@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace ArinWhois.Model
 {
@@ -16,7 +17,7 @@ namespace ArinWhois.Model
         [JsonProperty("org")]
         public Organization Organization { get; set; }
 
-        [JsonProperty("poc")]
-        public PointOfContact PointOfContact { get; set; }
+        //[JsonProperty("poc")]
+        //public PointOfContacts PointOfContacts { get; set; }
     }
 }
