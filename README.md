@@ -22,35 +22,45 @@ Sample Usage
 
     var arinClient = new ArinClient();
     
-    // Check single IP
-    var ipResponse = await arinClient.QueryIpAsync(IPAddress.Parse("69.63.176.0"));
-    
-    Console.WriteLine(ipResponse.Network.Name);
-    Console.WriteLine(ipResponse.Network.NetBlocks.NetBlock.Cidr);
-    
-    // Find out more about organization
-    var orgResponse = await arinClient.QueryResourceAsync(ipResponse.Network.OrgRef.Handle, 
-								ArinClient.ResourceType.Organization);
-    Console.WriteLine(orgResponse.Organization.Name);
-    Console.WriteLine(orgResponse.Organization.City);
+    //Check single IP and populate organization along with point of contacts
+    Response response = await arinClient.QueryIpAsync(IPAddress.Parse("104.131.68.92"));
+
+	//Get Organizational info
+	Organization organization = await QueryOrganizationAsync(response.Network.OrgRef.Handle);
+	response.Organization = organization;
+
+	//Get list of Point of contacts
+	PointOfContacts pointOfContactRefs = await QueryPointOfContactsAsync(response.Network.OrgRef.Handle);
+
+	IList<PointOfContact> pointOfContacts = new List<PointOfContact>();
 	
+	//Get Point of Contact details for each Point of Contact
+	foreach (Poclinkref poclinkref in pointOfContactRefs.Pocs.PocLinkRefs)
+	{
+		//Check if PoC for the same type exist in the list. If so, no need to query again.
+		PointOfContact pocCheck=pointOfContacts.Where(c => c?.poc?.Handle?.Value == poclinkref.Handle).FirstOrDefault();
+		if(pocCheck == null)
+		{
+			PointOfContact pointOfContact = await QueryPointOfContactAsync(poclinkref.Handle);
+			if(pointOfContact!=null)
+			{
+				pointOfContacts.Add(pointOfContact);
+			}
+		}  
+	}
 
-If you don't wanna do async, use `.Result`: 
-
-    var response = arinClient.QueryIpAsync(IPAddress.Parse("69.63.176.0")).Result;
-    
-But you should do async, really.
-
-
-Limitations
-===========
-* Read-only
+	if (response.Organization !=null)
+	{
+		response.Organization.PointOfContacts = pointOfContacts;
+	}
 
 
 
 Contributors
 ============
 * [MaxHorstmann](https://github.com/MaxHorstmann) (Max Horstmann)
+* [pwiens] (https://github.com/pwiens/ArinWhois.NET) (Paul Wiens)
+* [aspnet4you] (https://github.com/aspnet4you/ArinWhois.NET) (Prodip Saha)
 
 
 
