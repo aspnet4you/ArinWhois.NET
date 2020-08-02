@@ -16,8 +16,5 @@ namespace ArinWhois.Model
 
         [JsonProperty("org")]
         public Organization Organization { get; set; }
-
-        //[JsonProperty("poc")]
-        //public PointOfContacts PointOfContacts { get; set; }
     }
 }
