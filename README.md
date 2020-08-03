@@ -59,8 +59,8 @@ Sample Usage
 Contributors
 ============
 * [MaxHorstmann](https://github.com/MaxHorstmann) (Max Horstmann)
-* [pwiens] (https://github.com/pwiens/ArinWhois.NET) (Paul Wiens)
-* [aspnet4you] (https://github.com/aspnet4you/ArinWhois.NET) (Prodip Saha)
+* [pwiens](https://github.com/pwiens/ArinWhois.NET) (Paul Wiens)
+* [aspnet4you](https://github.com/aspnet4you/ArinWhois.NET) (Prodip Saha)
 
 
 
