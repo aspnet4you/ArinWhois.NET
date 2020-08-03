@@ -16,5 +16,11 @@ namespace ArinWhois.Model
 
         [JsonProperty("org")]
         public Organization Organization { get; set; }
+
+        [JsonProperty("customer")]
+        public Customer Customer { get; set; }
+
+        [JsonProperty("pointOfContacts")]
+        public IList<PointOfContact> PointOfContacts { get; set; }
     }
 }

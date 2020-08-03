@@ -7,7 +7,6 @@ namespace ArinWhois.Model
     public class Organization
     {
         public Org org { get; set; }
-        public IList<PointOfContact> PointOfContacts { get; set; }
     }
 
     public class Org

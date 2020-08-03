@@ -37,6 +37,9 @@ namespace ArinWhois.Model
 
         [JsonProperty("orgRef")]
         public OrgRef OrgRef { get; set; }
+
+        [JsonProperty("customerRef")]
+        public Customerref CustomerRef { get; set; }
     }
 
     public class OrgRef
@@ -73,5 +76,17 @@ namespace ArinWhois.Model
 
         [JsonIgnore]
         public string Cidr => $"{StartAddress}/{CidrLength}";
+    }
+
+    public class Customerref
+    {
+        [JsonProperty("@handle")]
+        public string Handle { get; set; }
+
+        [JsonProperty("@name")]
+        public string Name { get; set; }
+
+        [JsonProperty("$")]
+        public string Ref { get; set; }
     }
 }

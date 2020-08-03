@@ -28,10 +28,10 @@ namespace ArinWhois.Tests
 
             var organizationHandle = ipResponse.Network.OrgRef.Handle;
             var organizationResponse =
-                await arinClient.QueryResourceAsync(organizationHandle, ArinClient.ResourceType.Organization);
+                await arinClient.QueryOrganizationAsync(organizationHandle, ArinClient.ResourceType.Organization);
 
             Assert.IsNotNull(organizationResponse);
-            Assert.AreEqual(organizationResponse.Organization.City.Value, "Menlo Park");
+            Assert.AreEqual(organizationResponse.org.City.Value, "Menlo Park");
         }
 
         [TestMethod]

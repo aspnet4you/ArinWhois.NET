@@ -17,11 +17,12 @@ namespace ArinWhois.Client
             Unknown = 0,
             Network = 1,
             Organization = 2,
-            PointOfContact = 3
+            PointOfContact = 3,
+            Customer = 4
         }
 
         private const string BaseUrl = "http://whois.arin.net/rest";
-
+        
         private readonly HttpClient _httpClient = new HttpClient();
 
         private readonly JsonSerializerSettings _serializerSettings =
@@ -36,37 +37,49 @@ namespace ArinWhois.Client
                 var jsonString = await _httpClient.GetStringAsync(url);
                 Response response = JsonConvert.DeserializeObject<Response>(jsonString, _serializerSettings);
 
-                Organization organization = await QueryOrganizationAsync(response.Network.OrgRef.Handle);
-                response.Organization = organization;
+                Organization organization = null;
+                Customer customer =null;
+                PointOfContacts pointOfContactRefs =null;
 
-                PointOfContacts pointOfContactRefs = await QueryPointOfContactsAsync(response.Network.OrgRef.Handle);
+                if (!String.IsNullOrEmpty(response.Network?.OrgRef?.Handle))
+                {
+                    organization = await QueryOrganizationAsync(response.Network.OrgRef.Handle);
+                    response.Organization = organization;
+
+                    pointOfContactRefs = await QueryPointOfContactsAsync(response.Network.OrgRef.Handle);
+                }
+                else if(!String.IsNullOrEmpty(response.Network?.CustomerRef?.Handle))
+                {
+                    customer = await QueryCustomerAsync(response.Network.CustomerRef.Handle);
+                    response.Customer = customer;
+
+                    pointOfContactRefs = await QueryPointOfContactsAsync(response.Customer.ParentOrgRef.Handle);
+                }
+
 
                 IList<PointOfContact> pointOfContacts = new List<PointOfContact>();
 
                 foreach (Poclinkref poclinkref in pointOfContactRefs.Pocs.PocLinkRefs)
                 {
                     //Check if PoC for the same type exist in the list. If so, no need to query again.
-                    PointOfContact pocCheck=pointOfContacts.Where(c => c?.poc?.Handle?.Value == poclinkref.Handle).FirstOrDefault();
-                    if(pocCheck == null)
+                    PointOfContact pocCheck = pointOfContacts.Where(c => c?.poc?.Handle?.Value == poclinkref.Handle).FirstOrDefault();
+                    if (pocCheck == null)
                     {
                         PointOfContact pointOfContact = await QueryPointOfContactAsync(poclinkref.Handle);
-                        if(pointOfContact!=null)
+                        if (pointOfContact != null)
                         {
                             pointOfContacts.Add(pointOfContact);
                         }
-                    }  
+                    }
                 }
 
-                if (response.Organization !=null)
-                {
-                    response.Organization.PointOfContacts = pointOfContacts;
-                }
-
+                response.PointOfContacts = pointOfContacts;
+                
                 return response;
             }
-            catch
+            catch(Exception ex)
             {
-                return null;
+                return new Response();
             }
         }
 
@@ -75,9 +88,26 @@ namespace ArinWhois.Client
             try
             {
                 var query = $"org/{handle}";
+                                
                 var jsonString = await _httpClient.GetStringAsync(GetRequestUrl(query));
                 Organization organization = JsonConvert.DeserializeObject<Organization>(jsonString, _serializerSettings);
                 return organization;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<Customer> QueryCustomerAsync(string handle)
+        {
+            try
+            {
+                var query = $"customer/{handle}";
+
+                var jsonString = await _httpClient.GetStringAsync(GetRequestUrl(query));
+                Company company = JsonConvert.DeserializeObject<Company>(jsonString, _serializerSettings);
+                return company.Customer;
             }
             catch
             {
